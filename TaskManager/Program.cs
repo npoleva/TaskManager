@@ -22,10 +22,13 @@ builder.Services.AddDbContext<TaskManagerDbContext>(options =>
 builder.Services.AddScoped<ITaskItemsRepository, TaskItemsRepository>();
 builder.Services.AddScoped<ITaskItemsService, TaskItemsService>();
 
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
