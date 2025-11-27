@@ -7,10 +7,10 @@ namespace TaskManager.Services;
 
 public class TaskItemsService  : ITaskItemsService
 {
-    private readonly TaskItemsRepository _repository;
+    private readonly ITaskItemsRepository _repository;
     private readonly ILogger<TaskItemsService> _logger;
 
-    public TaskItemsService(TaskItemsRepository repository, ILogger<TaskItemsService> logger)
+    public TaskItemsService(ITaskItemsRepository repository, ILogger<TaskItemsService> logger)
     {
         _repository = repository;
         _logger = logger;
@@ -52,6 +52,10 @@ public class TaskItemsService  : ITaskItemsService
         try
         {
             dto.Id = 0;
+            
+            if (string.IsNullOrWhiteSpace(dto.Title))
+                throw new InvalidOperationException("Заголовок задачи не может быть пустым");
+            
             var entity = dto.ToEntity();
             var created = await _repository.AddAsync(entity);
             return created.ToDto();
@@ -74,6 +78,9 @@ public class TaskItemsService  : ITaskItemsService
         {
             if (dto.Id == 0)
                 throw new InvalidOperationException("Невозможно обновить задачу без Id");
+            
+            if (string.IsNullOrWhiteSpace(dto.Title))
+                throw new InvalidOperationException("Заголовок задачи не может быть пустым");
 
             var existing = await _repository.GetByIdAsync(dto.Id);
             if (existing == null)
