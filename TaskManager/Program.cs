@@ -1,4 +1,6 @@
 using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
+using TaskManager.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,8 @@ var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
 
 var connectionString = $"Host={host};Port={port};Database={db};Username={user};Password={password}";
 
+builder.Services.AddDbContext<TaskManagerDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
