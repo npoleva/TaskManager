@@ -2,6 +2,7 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Entities;
 using TaskManager.Repositories;
+using TaskManager.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<TaskManagerDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<ITaskItemsRepository, TaskItemsRepository>();
+builder.Services.AddScoped<ITaskItemsService, TaskItemsService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
